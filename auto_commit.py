@@ -1,29 +1,37 @@
 #!/usr/bin/env python3
 """
 Automated Daily GitHub Commit Script
-Makes a commit to your repository with daily updates
+Makes multiple random commits throughout the day
 """
 
 import os
 import subprocess
 from datetime import datetime
 import random
+import time
 
 # Configuration
 REPO_PATH = "/Users/abdullahabad/AbdullahAbbad-Portfolio/Auto-Github"
-COMMIT_FILE = "python.py"          # File that will be updated daily
-BRANCH_NAME = "main"               # Change to 'master' if needed
+COMMIT_FILE = "python.py"
+BRANCH_NAME = "main"
 
-# Fun quotes/facts for variety (optional)
+# Fun quotes/facts for variety
 DAILY_CONTENT = [
-    "Coded something cool today",
-    "Learned something new",
-    "Made progress on my project",
-    "Improved my codebase",
-    "Fixed some bugs",
-    "Studied new concepts",
-    "Worked on design",
-    "Optimized performance",
+    "🚀 Coded something cool today",
+    "💡 Learned something new", 
+    "🎯 Made progress on my project",
+    "✨ Improved my codebase",
+    "🔧 Fixed some bugs",
+    "📚 Studied new concepts",
+    "🎨 Worked on design",
+    "⚡ Optimized performance",
+    "🌟 Added new feature",
+    "🔍 Refactored code",
+    "📝 Updated documentation",
+    "🎉 Completed milestone",
+    "🛠️ Enhanced functionality",
+    "💻 Improved UI/UX",
+    "🔐 Added security improvements"
 ]
 
 
@@ -44,8 +52,8 @@ def run_git_command(command, cwd=REPO_PATH):
         return None
 
 
-def make_daily_commit():
-    """Create and push a daily commit"""
+def make_commit():
+    """Create and push a single commit"""
     
     # Get current date and time
     now = datetime.now()
@@ -55,16 +63,20 @@ def make_daily_commit():
     # Path to the commit file
     file_path = os.path.join(REPO_PATH, COMMIT_FILE)
     
-    # Create simple Python code update
-    content = f'''# Auto-generated daily commit
+    # Create simple Python code update with random content
+    random_message = random.choice(DAILY_CONTENT)
+    random_number = random.randint(1000, 9999)
+    
+    content = f'''# Auto-generated commit
 # Date: {date_str}
 # Time: {time_str}
+# Commit ID: {random_number}
 
 import random
 from datetime import datetime
 
 def daily_update():
-    """Daily automated function - {date_str}"""
+    """Daily automated function - {date_str} {time_str}"""
     messages = [
         "🚀 Coded something cool today",
         "💡 Learned something new", 
@@ -76,53 +88,77 @@ def daily_update():
         "⚡ Optimized performance"
     ]
     
-    print(f"Update #{random.randint(1000, 9999)}: {{random.choice(messages)}}")
+    print(f"Update #{random_number}: {random_message}")
     print(f"Generated on: {date_str} at {time_str}")
+    
+    # Additional random functionality
+    tasks_completed = random.randint(1, 10)
+    print(f"Tasks completed today: {{tasks_completed}}")
 
 if __name__ == "__main__":
     daily_update()
 '''
     
-    # Write to file (overwrite each time)
+    # Write to file
     with open(file_path, 'w') as f:
         f.write(content)
     
-    print(f"✅ Updated {COMMIT_FILE}")
-    
     # Git commands
-    print("📝 Adding changes...")
     run_git_command(f"git add {COMMIT_FILE}")
     
-    print("💾 Creating commit...")
-    commit_message = f"Daily update: {date_str}"
+    commit_message = f"{random_message} - {date_str}"
     run_git_command(f'git commit -m "{commit_message}"')
     
-    print("🚀 Pushing to GitHub...")
     run_git_command(f"git push origin {BRANCH_NAME}")
     
-    print(f"✨ Successfully committed and pushed on {date_str}!")
+    print(f"✅ Commit #{random_number} pushed at {time_str}")
+    return True
+
+
+def make_multiple_commits():
+    """Make 4-7 random commits with delays"""
+    
+    # Random number of commits (4-7)
+    num_commits = random.randint(4, 7)
+    
+    print("🤖 Multi-Commit Script Started")
+    print("=" * 50)
+    print(f"📊 Planning {num_commits} commits for today")
+    print("=" * 50)
+    
+    for i in range(num_commits):
+        try:
+            print(f"\n📝 Making commit {i+1}/{num_commits}...")
+            make_commit()
+            
+            # Add delay between commits (except for the last one)
+            if i < num_commits - 1:
+                # Random delay between 2-10 seconds
+                delay = random.randint(2, 10)
+                print(f"⏳ Waiting {delay} seconds before next commit...")
+                time.sleep(delay)
+                
+        except Exception as e:
+            print(f"❌ Error on commit {i+1}: {e}")
+            continue
+    
+    print("\n" + "=" * 50)
+    print(f"✨ Successfully completed {num_commits} commits!")
+    print("=" * 50)
 
 
 def setup_repo():
     """Initialize the repository if needed"""
     if not os.path.exists(REPO_PATH):
         print(f"❌ Repository path not found: {REPO_PATH}")
-        print("Please update REPO_PATH in the script")
         return False
     
-    # python.py will be created/overwritten by make_daily_commit
     print(f"✅ Repository found: {REPO_PATH}")
-    
     return True
 
 
 if __name__ == "__main__":
-    print("🤖 Auto Commit Script Started")
-    print("=" * 50)
-    
     if setup_repo():
-        make_daily_commit()
+        make_multiple_commits()
     else:
         print("\n⚠️  Please configure the script first!")
-        print("1. Update REPO_PATH to your repository location")
-        print("2. Make sure git is configured with your credentials")
